@@ -1,0 +1,9 @@
+[submodule "musl"]
+	path = musl
+	url = git://git.musl-libc.org/musl
+[submodule "glibc"]
+	path = glibc
+	url = git://sourceware.org/git/glibc.git
+[submodule "gcc"]
+	path = gcc
+	url = git://gcc.gnu.org/git/gcc.git
