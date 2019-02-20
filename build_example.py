@@ -58,7 +58,7 @@ def _build(compiler, linker, src_file, output_name):
                    "-nostdinc",
                    "-I" + _get_include_dir(libc),
                    "-fPIC",
-                   "-o", object_file, "-c", src_file]
+                   "-o", object_file, "-g", "-O0", "-c", src_file]
     muslflex_utils.run_step(name="Compiling %s" % object_file, cmd=compile_cmd)
 
     exe_file = output_name + "." + libc
