@@ -52,17 +52,23 @@ def _parse_args():
 
 
 def _build(compiler, linker, src_file, output_name):
+  compiler_suffix = os.path.basename(compiler)
+  linker_suffix = os.path.basename(linker)
   for libc in ("glibc", "musl"):
     object_file = output_name + "." + libc + ".o"
     compile_cmd = [compiler,
                    "-nostdinc",
                    "-I" + _get_include_dir(libc),
+                   "-I" + os.path.join(muslflex_utils.GCC_INSTALL_DIR,
+                                       "lib/gcc/x86_64-pc-linux-gnu/9.0.1/include/"),
                    "-fPIC",
                    "-o", object_file, "-g", "-O0", "-c", src_file]
     muslflex_utils.run_step(name="Compiling %s" % object_file, cmd=compile_cmd)
 
-    exe_file = output_name + "." + libc
-    link_cmd = [linker, "-nostdlib", "-static", "-pie", "--no-dynamic-linker",
+    exe_file = ".".join([output_name, compiler_suffix, linker_suffix, libc])
+    link_cmd = [linker, "-nostdlib",
+                "-static",
+                "-pie", "--no-dynamic-linker",
                 "-L" + _get_lib_dir(libc), "-L" + muslflex_utils.GCC_LIB_DIR,
                 object_file, _get_rcrt1(libc), _get_crti(libc),
                 muslflex_utils.GCC_CRT_BEGIN,

@@ -29,7 +29,7 @@ def run_step(name, cmd, cwd=None):
   if cwd:
     process_options["cwd"] = cwd
   print(">>> STEP: %s" % name)
-  print("    COMMAND: %s" % cmd)
+  print("    COMMAND: %s" % " ".join(cmd))
   print("    CWD: %s" % cwd)
   process = subprocess.Popen(cmd, **process_options)
   stdout, _ = process.communicate()
