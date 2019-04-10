@@ -37,7 +37,7 @@ def _get_crtn(libc):
 
 def _parse_args():
   parser = argparse.ArgumentParser(
-      description="Generate a Makefile example which can build an example in "
+      description="Script which can which can build an example in "
                   "various flavors")
   parser.add_argument(
       "--example", "-p", dest="example", type=str, required=True,
