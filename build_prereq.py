@@ -2,6 +2,7 @@
 
 import argparse
 import os
+import shutil
 import sys
 
 import muslflex_utils
@@ -73,6 +74,22 @@ def _build_gcc(options):
                           cwd=muslflex_utils.GCC_BUILD_DIR)
 
 
+def _build_llvm(options):
+  if options.clean:
+    shutil.rmtree(muslflex_utils.LLVM_BUILD_DIR)
+  if not os.path.exists(muslflex_utils.LLVM_BUILD_DIR):
+    os.mkdir(muslflex_utils.LLVM_BUILD_DIR)
+  muslflex_utils.run_step(
+      name="Running LLVM CMake",
+      cmd=["cmake", muslflex_utils.LLVM_DIR, "-DCMAKE_BUILD_TYPE=Debug",
+           "-DLLVM_ENABLE_PROJECTS=llvm;clang;lld", "-G","Ninja"],
+      cwd=muslflex_utils.LLVM_BUILD_DIR)
+  muslflex_utils.run_step(
+      name="Running Ninja to build LLVM",
+      cmd=["ninja"],
+      cwd=muslflex_utils.LLVM_BUILD_DIR)
+
+
 def _run_cmake(unused_options=None):
   muslflex_utils.run_step(
       name="Running cmake",
@@ -86,6 +103,7 @@ _BUILDERS = {
     "musl": _build_musl,
     "glibc": _build_glibc,
     "gcc": _build_gcc,
+    "llvm": _build_llvm,
 }
 
 

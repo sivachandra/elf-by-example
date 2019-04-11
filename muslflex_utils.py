@@ -15,6 +15,10 @@ GLIBC_SRC_ROOT = os.path.join(MUSLFLEX_SRC_ROOT, "glibc")
 GLIBC_BUILD_DIR = os.path.join(MUSLFLEX_SRC_ROOT, "glibc-build")
 GLIBC_INSTALL_DIR = os.path.join(MUSLFLEX_SRC_ROOT, "glibc-install")
 
+LLVM_PROJECT_DIR = os.path.join(MUSLFLEX_SRC_ROOT, "llvm-project")
+LLVM_DIR = os.path.join(LLVM_PROJECT_DIR, "llvm")
+LLVM_BUILD_DIR = os.path.join(LLVM_PROJECT_DIR, "build")
+
 MUSL_SRC_ROOT = os.path.join(MUSLFLEX_SRC_ROOT, "musl")
 MUSL_INSTALL_DIR = os.path.join(MUSLFLEX_SRC_ROOT, "musl-install")
 
