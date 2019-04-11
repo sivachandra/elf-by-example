@@ -7,3 +7,6 @@
 [submodule "gcc"]
 	path = gcc
 	url = git://gcc.gnu.org/git/gcc.git
+[submodule "llvm-project"]
+	path = llvm-project
+	url = https://github.com/llvm/llvm-project.git
