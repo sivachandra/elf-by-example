@@ -96,8 +96,11 @@ def main():
   if example_path.endswith("/"):
     example_path = example_path[:-1]
   basename = os.path.basename(example_path)
+  example_build_dir = os.path.join(muslflex_utils.OUT_DIR, example_path)
+  if not os.path.exists(example_build_dir):
+    os.makedirs(example_build_dir)
   src_file = os.path.join(os.path.abspath(example_path), "main.c")
-  output_name = os.path.join(muslflex_utils.OUT_DIR, example_path, basename)
+  output_name = os.path.join(example_build_dir, basename)
   _build(src_file, output_name)
   return 0
   

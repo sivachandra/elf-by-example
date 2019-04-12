@@ -90,19 +90,10 @@ def _build_llvm(options):
       cwd=muslflex_utils.LLVM_BUILD_DIR)
 
 
-def _run_cmake(unused_options=None):
-  muslflex_utils.run_step(
-      name="Running cmake",
-      cmd=["cmake", muslflex_utils.MUSLFLEX_SRC_ROOT],
-      cwd=muslflex_utils.OUT_DIR)
-
-
-
 _BUILDERS = {
-    "cmake": _run_cmake,
     "musl": _build_musl,
     "glibc": _build_glibc,
-    "gcc": _build_gcc,
+    "gcc": _build_gcc,  # We need a gcc build because of crtBegin*
     "llvm": _build_llvm,
 }
 
