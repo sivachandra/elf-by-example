@@ -1,7 +1,9 @@
 #! /usr/bin/python -B
 
 import argparse
+import json
 import os
+import sys
 
 import muslflex_utils
 
@@ -15,6 +17,13 @@ _LINKERS = [
     "ld",  # We will assume that the BFD linker is available in path as "ld".
     os.path.join(muslflex_utils.LLVM_BUILD_DIR, "bin", "ld.lld"),
 ]
+
+_CONFIG_FILE = "CONFIG.json"
+_CONFIG_OPTIONS = [
+    "CCFLAGS",  # List of additional CCFLAGS for the compile step.
+    "LDFLAGS",  # List of additional LDFLAGS for the link step.
+]
+
 
 def _get_install_dir(libc):
   if libc == "glibc":
@@ -55,7 +64,7 @@ def _parse_args():
   return parser.parse_args()
 
 
-def _build(src_file, output_name):
+def _build(src_file, output_name, ccflags, ldflags):
   for compiler in _COMPILERS:
     compiler_suffix = os.path.basename(compiler)
     for libc in ("glibc", "musl"):
@@ -66,8 +75,7 @@ def _build(src_file, output_name):
                      "-I" + os.path.join(
                          muslflex_utils.GCC_INSTALL_DIR,
                          "lib/gcc/x86_64-pc-linux-gnu/9.0.1/include/"),
-                     "-fPIC",
-                     "-o", object_file, "-g", "-O0", "-c", src_file]
+                     "-o", object_file, "-g", "-O0", "-c", src_file] + ccflags
       muslflex_utils.run_step(name="Compiling %s" % object_file,
                               cmd=compile_cmd)
     
@@ -86,8 +94,15 @@ def _build(src_file, output_name):
                     muslflex_utils.GCC_CRT_BEGIN,
                     "--start-group", "-lc", "-lgcc", "-lgcc_eh", "--end-group",
                     muslflex_utils.GCC_CRT_END, _get_crtn(libc),
-                    "-o", exe_file]
+                    "-o", exe_file] + ldflags
         muslflex_utils.run_step(name="Linking %s" % exe_file, cmd=link_cmd)
+
+
+def _verify_config(config):
+  for k in config.keys():
+    if k not in _CONFIG_OPTIONS:
+      sys.exit("Unknown CONFIG.json option '%s';\nAllowed options are %s" %
+               (k, _CONFIG_OPTIONS))
 
 
 def main():
@@ -100,8 +115,23 @@ def main():
   if not os.path.exists(example_build_dir):
     os.makedirs(example_build_dir)
   src_file = os.path.join(os.path.abspath(example_path), "main.c")
+  if not os.path.exists(src_file):
+    exit("Did not find a main.c file in '%s'" % example_path)
+  config_file = os.path.join(os.path.abspath(example_path), _CONFIG_FILE)
+  ccflags = []
+  ldflags = []
+  if os.path.exists(config_file):
+    with open(config_file, "r") as f:
+      config = json.load(f)
+    _verify_config(config)
+    ccflags = config.get("CCFLAGS", [])
+    if type(ccflags) is not list:
+      sys.exit("CCFLAGS in %s should be a list." % config_file)
+    ldflags = config.get("LDFLAGS", [])
+    if type(ldflags) is not list:
+      sys.exit("LDFLAGS in %s should be a list." % config_file)
   output_name = os.path.join(example_build_dir, basename)
-  _build(src_file, output_name)
+  _build(src_file, output_name, ccflags, ldflags)
   return 0
   
 
