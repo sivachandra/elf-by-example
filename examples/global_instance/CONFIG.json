@@ -1,0 +1,4 @@
+{
+  "LANG": "C++",
+  "CCFLAGS": ["-fpie"]
+}
