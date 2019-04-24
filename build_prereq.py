@@ -10,8 +10,6 @@ import muslflex_utils
 
 def _parse_args():
   parser = argparse.ArgumentParser(description="Build muslflex prerequisites.")
-  parser.add_argument("--debug", "-g", dest="debug", action="store_true",
-                      help="Make debug builds of all prerequisities.")
   parser.add_argument("--clean", "-x", dest="clean", action="store_true",
                       help="Perform a clean build.")
   parser.add_argument("--component", "-r", dest="component", default=None,
@@ -21,10 +19,7 @@ def _parse_args():
 
 def _build_musl(options):
   configure_script = os.path.join(muslflex_utils.MUSL_SRC_ROOT, "configure")
-  cflags = ["-fPIC"]
-  if options.debug:
-    cflags.append("-g -O0")
-  configure_options = ["CFLAGS=%s" % " ".join(cflags),
+  configure_options = ["CFLAGS=%s" % "-g -O0",
                        "--disable-shared",
                        "--prefix=%s" % muslflex_utils.MUSL_INSTALL_DIR]
   if options.clean:
