@@ -10,16 +10,16 @@ function returned by the resolver.
 
 For `x86_64`, the information that there are `ifuncs` to resolve at startup, is
 conveyed to the CRT by relocations of type `R_X86_64_IRELATIVE` in the sections
-named `.rel.plt` or `.rela.plt`. The reason why we have the `.plt` suffix is
-explained below.
+named `.rel.plt` or `.rela.plt` (the reason why we have the `.plt` suffix is
+explained below.)
 
 When you build and run this example, you will notice that the executable linked
 against musl-libc crashes. This is because, musl-libc's CRT does apply
-`R_X86_64_IRELATIVE` relocations. That is, it does not invoke the resolver
-functions at startup time. But, for the purpose of further discussion, we
-will use the musl-linked binaries as they are easier to analyze with `readelf`.
+`R_X86_64_IRELATIVE` relocations. That is, musl-libc's CRT does not invoke the
+the ifunc resolvers at startup time. But, for the purpose of further discussion,
+we will use the musl-linked binaries as they are simpler to analyze with `readelf`.
 
-Let take look at the relevant part of the readelf output for the binary
+Look at the relevant part of the readelf output for the binary
 `out/examples/ifunc/ifunc.clang.musl.ld.lld`:
 
 ```
@@ -41,4 +41,4 @@ applied falls in the `.got.plt` section and not the `.text` section. This is
 because, text relocations are not allowed at run time, so the linker generates
 a PLT based relocation. This is the reason why the `ifunc` related relocations
 are listed in `.rel[a].plt` (with the `.plt` prefix indicating that it
-corresponds to relocations for entities listed in the PLT).
+corresponds to relocations for entries listed in the PLT).
