@@ -1,20 +1,20 @@
 # `.rel.dyn` relocations in static-pie
 
-Normally, in statically linked executables, one does not expect to any dynamic
-relocations (the relocations which are listed in the `.rel.dyn` section.)
-However, since static-pie is infact a PIE, a bunch of relocations will have to
-be applied by the CRT at startup. For `x86_64`, such relocations are of type
-`R_X86_64_RELATIVE`. For static-pie, they are typically required if there is a
-global variable holding the address of another global var. Since the address of
-global variables at runtime will depend on the load address of the executable,
-the relocations of type `R_X86_64_RELATIVE` instruct the CRT to adjust their
-addresses based on the executable's load address.
+Normally, in statically linked executables, one does not expect to see any
+dynamic relocations (the relocations which are listed in the `.rel.dyn`
+section.) However, since static-pie is infact a PIE, a bunch of relocations
+will have to be applied by the CRT at startup. For `x86_64`, such relocations
+are of type `R_X86_64_RELATIVE`. They are typically required if there is a
+global variable holding the address of another global variable. Since the
+address of global variables at runtime will depend on the load address of the
+executable, the relocations of type `R_X86_64_RELATIVE` instructs the CRT to
+adjust their pointers based on the executable's load address.
 
 The example in this directory helps us see the need for the above relocations.
 In `main.c`, we have two global variables, `global_int` and `global_int_ptr`.
 The variable `global_int_ptr` holds the address of `global_int`. If we look at
 the readelf dump of
-`out/examples/global_var_ptr/global_var_ptr.clang.musl.ld.lld`, we have this:
+`out/examples/global_var_ptr/global_var_ptr.clang.musl.ld.lld`, we see this:
 
 ```
 Relocation section '.rela.dyn' at offset 0x248 contains 6 entries:
