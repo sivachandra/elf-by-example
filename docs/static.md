@@ -2,9 +2,9 @@
 
 A statically linked executable is one which does not depend on any dynamically 
 loaded libraries. Traditionally, a statically linked executable is also not a
-PIE. Hence, the ELF file of a statically linked executable will not have a
-`.dynamic` section. Further, since the executable is not a PIE, it will not
-require any dynamic relocations to be applied. Hence, the ELF file of a
+[PIE](pie.md). Hence, the ELF file of a statically linked executable will not
+have a `.dynamic` section. Further, since the executable is not a PIE, it will
+not require any dynamic relocations to be applied. Hence, the ELF file of a
 statically linked executable will also not have a `.dyn.rel[a]` sections.
 
 Since a statically linked executable is not a PIE, one can do another
