@@ -32,3 +32,8 @@ long time to finish as GCC and Clang are built from sources. Note also that
 Clang. One will have to install such dependencies separately. Conveniently though,
 when `build_prereq.py` runs the configure step of say GCC, it will error out with
 an indicative message if GCC's dependencies are missing.
+
+## Highlevel Concepts
+
+1. [What exactly is a **libc**](libc.md)
+2. [What role does the CRT play](crt.md)
