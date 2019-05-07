@@ -42,5 +42,6 @@ over the examples. They can also be read separate from the examples.
 1. [What is PIE?](pie.md)
 1. [What is a statically linked executable?](static.md)
 1. [What is a static-pie linked executable?](static_pie.md)
+1. [Relocations](relocations.md)
 1. [What exactly is a libc](libc.md)
 1. [What role does the CRT play](crt.md)
