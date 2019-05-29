@@ -15,3 +15,12 @@ typical modern libc. For example, `syscall.h`.
 5. **The dynamic loader** - This component is responsible for dynamic loading
 of shared libraries.
 
+### Library files
+
+The POSIX standard requires that certain groups of library functions be packaged
+into separate library files. For example, it requires that the math functions be
+packaged as `libm.a` for the static linking and `libm.so` for dynamic linking.
+Hence, though the C standard does not require this separation, all POSIX
+compliant libc implementation provide `libm.a` and `libm.so` separate from
+`libc.a` and `libc.so`. Same is true with `pthread` and a bunch of other
+libraries also.
